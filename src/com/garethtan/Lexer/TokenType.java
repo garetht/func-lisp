@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 enum TokenType {
     Identifier(Pattern.compile("[a-z][a-z0-9]*|\\+|-|\\*|//")),
-    Int(null),
+    Int(Pattern.compile("[1-9][0-9]*|0")),
     LeftParen(Pattern.compile(Pattern.quote("("))),
     RightParen(Pattern.compile(Pattern.quote(")"))),
     LeftSquare(Pattern.compile(Pattern.quote("["))),

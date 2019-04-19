@@ -8,7 +8,7 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        Lexer lexer = new Lexer("(+ 1 2)");
+        Lexer lexer = new Lexer("(+ 1 1)");
 
         List<Token> tokens = lexer.Tokenize();
 

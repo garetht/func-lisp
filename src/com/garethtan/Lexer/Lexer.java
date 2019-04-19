@@ -59,10 +59,7 @@ public class Lexer {
             if (this.MakeToken(TokenType.Identifier, tokens, Pattern.compile("[^a-z0-9_+\\-*/]"))) {
                 continue;
             }
-
-            if (this.scanner.hasNextInt()) {
-                int integer = this.scanner.nextInt();
-                tokens.add(new Token(TokenType.Int, integer));
+            if (this.MakeToken(TokenType.Int, tokens, Pattern.compile("[^\\d]"))) {
                 continue;
             }
 
