@@ -1,5 +1,6 @@
 package com.garethtan.Lexer;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -12,6 +13,10 @@ public class Lexer {
 
     public Lexer(String programText) {
         this.scanner = new Scanner(programText);
+    }
+
+    public Lexer(InputStream stream) {
+        this.scanner = new Scanner(stream);
     }
 
     private boolean MakeToken(TokenType tokenType, List<Token> tokens) {
@@ -66,6 +71,7 @@ public class Lexer {
             throw new Exception("Token not recognized: " + this.scanner.next());
         }
 
+        tokens.add(new Token(TokenType.Eof));
         return tokens;
     }
 }
