@@ -11,4 +11,12 @@ public class CallNode extends Node {
         this.identifier = identifier;
         this.arguments = arguments;
     }
+
+    public IdentifierNode getIdentifier() {
+        return this.identifier;
+    }
+
+    public List<Node> getArguments() {
+        return this.arguments;
+    }
 }

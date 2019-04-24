@@ -6,4 +6,8 @@ public class IntLiteralNode extends Node {
     public IntLiteralNode(int value) {
         this.value = value;
     }
+
+    public int getValue() {
+        return this.value;
+    }
 }

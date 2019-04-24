@@ -15,7 +15,7 @@ public class Parser {
 
 
     public Parser(Lexer lexer) throws Exception {
-        this.tokens = lexer.Tokenize();
+        this.tokens = lexer.tokenize();
         this.lexerPointer = 0;
     }
 
@@ -38,7 +38,7 @@ public class Parser {
             return nextToken;
         }
 
-        throw new Exception("Unexpected token: " + nextToken);
+        throw new Exception("unexpected token: " + nextToken);
     }
 
     private List<Node> Start() throws Exception {
@@ -53,6 +53,7 @@ public class Parser {
                 return rest;
             }
         } else if (nextToken.getType() == TokenType.Eof) {
+            this.Scan(TokenType.Eof);
             return new ArrayList<>();
         }
 
@@ -66,18 +67,18 @@ public class Parser {
             List<Node> functions = this.Functions();
             functions.add(0, callNode);
             return functions;
-        } else if (nextToken.getType() == TokenType.Eof) {
+        } else if (nextToken.getType() == TokenType.Eof || nextToken.getType() == TokenType.RightParen) {
             return new ArrayList<>();
         }
 
-        throw new Exception("Unexpected token: " + nextToken.getValue());
+        throw new Exception("unexpected token: " + nextToken);
     }
 
     private CallNode Call() throws Exception {
         this.Scan(TokenType.LeftParen);
         Token identifier = this.Scan(TokenType.Identifier);
         List<Node> arguments = this.Expression();
-
+        this.Scan(TokenType.RightParen);
 
         return new CallNode(IdentifierNode.FromToken(identifier), arguments);
     }
@@ -112,7 +113,6 @@ public class Parser {
             rest.add(0, identifierNode);
             return rest;
         } else if (nextToken.getType() == TokenType.RightParen) {
-            this.Scan(TokenType.RightParen);
             return new LinkedList<>();
         }
 

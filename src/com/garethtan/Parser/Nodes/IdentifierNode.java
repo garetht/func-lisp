@@ -17,4 +17,8 @@ public class IdentifierNode extends Node {
 
         return new IdentifierNode((String) token.getValue());
     }
+
+    public String getName() {
+        return this.name;
+    }
 }
