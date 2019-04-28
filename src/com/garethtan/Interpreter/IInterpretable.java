@@ -3,5 +3,5 @@ package com.garethtan.Interpreter;
 import com.garethtan.Value.Value;
 
 public interface IInterpretable {
-    Value interpret();
+    Value interpret(Environment environment);
 }

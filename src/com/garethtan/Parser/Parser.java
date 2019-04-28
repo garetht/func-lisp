@@ -19,20 +19,20 @@ public class Parser {
         this.lexerPointer = 0;
     }
 
-    public List<Node> Parse() throws Exception {
-        return this.Start();
+    public ProgramNode Parse() throws Exception {
+        return new ProgramNode(this.Start());
     }
 
-    private Token NextToken(int i) {
+    private Token nextToken(int i) {
         return this.tokens.get(this.lexerPointer + i);
     }
 
-    private Token NextToken() {
-        return this.NextToken(0);
+    private Token nextToken() {
+        return this.nextToken(0);
     }
 
-    private Token Scan(TokenType tokenType) throws Exception {
-        Token nextToken = this.NextToken();
+    private Token scan(TokenType tokenType) throws Exception {
+        Token nextToken = this.nextToken();
         if (nextToken.getType() == tokenType) {
             this.lexerPointer += 1;
             return nextToken;
@@ -42,18 +42,18 @@ public class Parser {
     }
 
     private List<Node> Start() throws Exception {
-        Token nextToken = this.NextToken();
+        Token nextToken = this.nextToken();
         if (nextToken.getType() == TokenType.LeftParen) {
-            if (this.NextToken(1).getType() == TokenType.Identifier) {
+            if (this.nextToken(1).getType() == TokenType.Identifier || this.nextToken(1).getType() == TokenType.LeftParen) {
                 return this.Functions();
-            } else if (this.NextToken(1).getType() == TokenType.Defn) {
+            } else if (this.nextToken(1).getType() == TokenType.Defn) {
                 Node def = this.Definition();
                 List<Node> rest = this.Start();
                 rest.add(0, def);
                 return rest;
             }
         } else if (nextToken.getType() == TokenType.Eof) {
-            this.Scan(TokenType.Eof);
+            this.scan(TokenType.Eof);
             return new ArrayList<>();
         }
 
@@ -61,7 +61,7 @@ public class Parser {
     }
 
     private List<Node> Functions() throws Exception {
-        Token nextToken = this.NextToken();
+        Token nextToken = this.nextToken();
         if (nextToken.getType() == TokenType.LeftParen) {
             Node callNode = this.Call();
             List<Node> functions = this.Functions();
@@ -75,39 +75,51 @@ public class Parser {
     }
 
     private CallNode Call() throws Exception {
-        this.Scan(TokenType.LeftParen);
-        Token identifier = this.Scan(TokenType.Identifier);
+        this.scan(TokenType.LeftParen);
+        Node callExpression;
+        if (this.nextToken().getType() == TokenType.LeftParen) {
+            callExpression = this.Call();
+        } else {
+            Token identifier = this.scan(TokenType.Identifier);
+            callExpression = IdentifierNode.FromToken(identifier);
+        }
         List<Node> arguments = this.Expression();
-        this.Scan(TokenType.RightParen);
+        this.scan(TokenType.RightParen);
 
-        return new CallNode(IdentifierNode.FromToken(identifier), arguments);
+        return new CallNode(callExpression, arguments);
     }
 
     private DefinitionNode Definition() throws Exception {
-        this.Scan(TokenType.LeftParen);
-        this.Scan(TokenType.Defn);
-        Token name = this.Scan(TokenType.Identifier);
-        this.Scan(TokenType.LeftSquare);
-        Token argument = this.Scan(TokenType.Identifier);
-        this.Scan(TokenType.RightSquare);
-        CallNode body = this.Call();
-        this.Scan(TokenType.RightParen);
+        this.scan(TokenType.LeftParen);
+        this.scan(TokenType.Defn);
+        Token name = this.scan(TokenType.Identifier);
+        this.scan(TokenType.LeftSquare);
+        Token argument = this.scan(TokenType.Identifier);
+        this.scan(TokenType.RightSquare);
+
+        Node body;
+        if (this.nextToken().getType() == TokenType.LeftParen && this.nextToken(1).getType() == TokenType.Defn) {
+            body = this.Definition();
+        } else {
+            body = this.Call();
+        }
+         this.scan(TokenType.RightParen);
 
         return new DefinitionNode(IdentifierNode.FromToken(name), IdentifierNode.FromToken(argument), body);
     }
 
     private List<Node> Expression() throws Exception {
-        Token nextToken = this.NextToken();
+        Token nextToken = this.nextToken();
         if (nextToken.getType() == TokenType.LeftParen) {
             return this.Functions();
         } else if (nextToken.getType() == TokenType.Int) {
-            Token intToken = this.Scan(TokenType.Int);
+            Token intToken = this.scan(TokenType.Int);
             Node integerNode = new IntLiteralNode((int) intToken.getValue());
             List<Node> rest = this.Expression();
             rest.add(0, integerNode);
             return rest;
         } else if (nextToken.getType() == TokenType.Identifier) {
-            Token idToken = this.Scan(TokenType.Identifier);
+            Token idToken = this.scan(TokenType.Identifier);
             Node identifierNode = IdentifierNode.FromToken(idToken);
             List<Node> rest = this.Expression();
             rest.add(0, identifierNode);

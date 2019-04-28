@@ -1,5 +1,6 @@
 package com.garethtan.Parser.Nodes;
 
+import com.garethtan.Interpreter.Environment;
 import com.garethtan.Value.IntValue;
 import com.garethtan.Value.PlusBuiltInValue;
 import com.garethtan.Value.Value;
@@ -8,17 +9,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CallNode extends Node {
-    private final IdentifierNode identifier;
+    private final Node callExpresion;
     private final List<Node> arguments;
 
-    public CallNode(IdentifierNode identifier, List<Node> arguments) {
+    public CallNode(Node callExpression, List<Node> arguments) {
 
-        this.identifier = identifier;
+        this.callExpresion = callExpression;
         this.arguments = arguments;
     }
 
-    public IdentifierNode getIdentifier() {
-        return this.identifier;
+    public Node getCallExpresion() {
+        return this.callExpresion;
     }
 
     public List<Node> getArguments() {
@@ -26,13 +27,13 @@ public class CallNode extends Node {
     }
 
     @Override
-    public Value interpret() {
+    public Value interpret(Environment environment) {
         List<IntValue> arguments = new ArrayList<>();
         for (Node argument : this.arguments) {
-            arguments.add((IntValue) argument.interpret());
+            arguments.add((IntValue) argument.interpret(environment));
         }
 
-        PlusBuiltInValue function = this.identifier.interpret();
+        PlusBuiltInValue function = (PlusBuiltInValue) this.callExpresion.interpret(environment);
         return function.call(arguments);
     }
 }
