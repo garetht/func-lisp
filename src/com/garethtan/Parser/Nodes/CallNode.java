@@ -1,5 +1,10 @@
 package com.garethtan.Parser.Nodes;
 
+import com.garethtan.Value.IntValue;
+import com.garethtan.Value.PlusBuiltInValue;
+import com.garethtan.Value.Value;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class CallNode extends Node {
@@ -18,5 +23,16 @@ public class CallNode extends Node {
 
     public List<Node> getArguments() {
         return this.arguments;
+    }
+
+    @Override
+    public Value interpret() {
+        List<IntValue> arguments = new ArrayList<>();
+        for (Node argument : this.arguments) {
+            arguments.add((IntValue) argument.interpret());
+        }
+
+        PlusBuiltInValue function = this.identifier.interpret();
+        return function.call(arguments);
     }
 }

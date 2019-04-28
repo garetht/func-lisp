@@ -2,6 +2,8 @@ package com.garethtan.Parser.Nodes;
 
 import com.garethtan.Lexer.Token;
 import com.garethtan.Lexer.TokenType;
+import com.garethtan.Value.PlusBuiltInValue;
+import com.garethtan.Value.Value;
 
 public class IdentifierNode extends Node {
     private final String name;
@@ -20,5 +22,14 @@ public class IdentifierNode extends Node {
 
     public String getName() {
         return this.name;
+    }
+
+    @Override
+    public PlusBuiltInValue interpret() {
+        if (this.name.equals("+")) {
+            return new PlusBuiltInValue();
+        } else {
+            return null;
+        }
     }
 }

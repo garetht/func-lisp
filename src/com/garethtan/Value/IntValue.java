@@ -10,4 +10,9 @@ public class IntValue extends Value {
     public int getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%d", this.value);
+    }
 }

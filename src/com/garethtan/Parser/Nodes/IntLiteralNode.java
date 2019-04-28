@@ -1,5 +1,8 @@
 package com.garethtan.Parser.Nodes;
 
+import com.garethtan.Value.IntValue;
+import com.garethtan.Value.Value;
+
 public class IntLiteralNode extends Node {
     private int value;
 
@@ -9,5 +12,10 @@ public class IntLiteralNode extends Node {
 
     public int getValue() {
         return this.value;
+    }
+
+    @Override
+    public Value interpret() {
+        return new IntValue(this.value);
     }
 }

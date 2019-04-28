@@ -1,4 +1,6 @@
 package com.garethtan.Parser.Nodes;
 
-public abstract class Node {
+import com.garethtan.Interpreter.IInterpretable;
+
+public abstract class Node implements IInterpretable {
 }

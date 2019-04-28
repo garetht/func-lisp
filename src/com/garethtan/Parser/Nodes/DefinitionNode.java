@@ -1,5 +1,7 @@
 package com.garethtan.Parser.Nodes;
 
+import com.garethtan.Value.Value;
+
 public class DefinitionNode extends Node {
     private final IdentifierNode identifier;
     private final IdentifierNode argument;
@@ -9,5 +11,10 @@ public class DefinitionNode extends Node {
         this.identifier = name;
         this.argument = argument;
         this.body = body;
+    }
+
+    @Override
+    public Value interpret() {
+        return null;
     }
 }
