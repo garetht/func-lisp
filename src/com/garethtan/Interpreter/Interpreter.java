@@ -29,7 +29,7 @@ public class Interpreter {
         } else if (node instanceof IdentifierNode) {
             return this.interpret((IdentifierNode) node);
         } else {
-            throw new Exception("Definition nodes have not yet been implemented.");
+            return 0;
         }
     }
 

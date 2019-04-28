@@ -61,7 +61,7 @@ public class Lexer {
             if (this.MakeToken(TokenType.Defn, tokens)) {
                 continue;
             }
-            if (this.MakeToken(TokenType.Identifier, tokens, Pattern.compile("[^a-z0-9_+]"))) {
+            if (this.MakeToken(TokenType.Identifier, tokens, Pattern.compile("[^a-z0-9_\\-+]"))) {
                 continue;
             }
             if (this.MakeToken(TokenType.Int, tokens, Pattern.compile("[^\\d]"))) {

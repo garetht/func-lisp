@@ -1,4 +1,13 @@
-(defn function-name [name] (+ name 2))
-(defn function-name [name] (+ name 2))
-(+ 2 2)
-(+ 17 4)
+(defn doubler [x]
+      (+ x x))
+
+(defn tripler [x]
+      (+ x x x))
+
+(defn quadrupler [x]
+      (+ x x x x))
+
+(defn general-adder [f]
+      (f x))
+
+(doubler 2)
